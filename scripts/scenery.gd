@@ -10,6 +10,8 @@ func _ready() -> void:
 
 func _draw() -> void:
 	# Céu, mar e areia inspirados na Beira-Mar de Fortaleza.
+	# Cor de fundo cobre também a área revelada em telas verticais.
+	RenderingServer.set_default_clear_color(Color("#7ac8dc"))
 	draw_rect(Rect2(-500, -500, level_length + 1000, 1040), Color("#7ac8dc"))
 	draw_rect(Rect2(-500, 195, level_length + 1000, 95), Color("#299bb5"))
 	for x in range(-400, int(level_length) + 500, 84):

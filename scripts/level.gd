@@ -48,6 +48,8 @@ func build(definition: LevelDefinition) -> void:
 	camera.limit_top = 0
 	camera.limit_bottom = VIEW_HEIGHT
 	player.add_child(camera)
+	get_viewport().size_changed.connect(_fit_camera)
+	_fit_camera()
 
 	for placement in definition.obstacles:
 		var obstacle := StreetObstacle.new()
@@ -66,3 +68,9 @@ func build(definition: LevelDefinition) -> void:
 	bus.position = Vector2(FortalezaBus.INTRO_START_X, GROUND_Y)
 	bus.setup()
 	add_child(bus)
+
+func _fit_camera() -> void:
+	# Mantém o chão na base; telas altas revelam mais céu.
+	var view_height := get_viewport_rect().size.y
+	camera.limit_top = mini(0, int(VIEW_HEIGHT - view_height))
+	camera.position.y = VIEW_HEIGHT - view_height / 2.0 - GROUND_Y
