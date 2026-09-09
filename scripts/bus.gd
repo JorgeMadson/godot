@@ -3,10 +3,20 @@ extends Area2D
 
 signal boarded
 signal arrived_at_stop
+signal departure_finished
 
-var accepting_passengers := false
-var approaching := false
-var departing := false
+enum State { CLOSED, APPROACHING, WAITING, DEPARTING, GONE }
+const INTRO_START_X := -40.0
+const INTRO_SPEED := 500.0
+const DEPARTURE_MAX_SPEED := 430.0
+const DEPARTURE_ACCELERATION := 260.0
+const REAR_EXTENT := 240.0
+const EXIT_MARGIN := 16.0
+const WHEEL_ANIMATION_SPEED := 12.0
+var state := State.CLOSED
+var accepting_passengers: bool:
+	get:
+		return state == State.WAITING
 var departure_speed := 0.0
 var animation_time := 0.0
 var stop_x := 0.0
@@ -18,50 +28,53 @@ func setup() -> void:
 	collision.shape = shape
 	collision.position = Vector2(-62, -44)
 	add_child(collision)
-	collision_layer = 2
-	collision_mask = 1
+	collision_layer = CollisionLayers.INTERACTIONS
+	collision_mask = CollisionLayers.PLAYER
 	body_entered.connect(_on_body_entered)
 	queue_redraw()
 
 func close_doors() -> void:
-	accepting_passengers = false
+	state = State.CLOSED
 	queue_redraw()
 
 func begin_approach(target_x: float) -> void:
 	stop_x = target_x
-	position.x = -40.0
-	accepting_passengers = false
-	approaching = true
-	departing = false
-	departure_speed = 500.0
+	position.x = INTRO_START_X
+	state = State.APPROACHING
+	departure_speed = INTRO_SPEED
 	queue_redraw()
 
 func open_doors() -> void:
-	accepting_passengers = true
+	state = State.WAITING
 	queue_redraw()
 
 func depart() -> void:
 	close_doors()
-	approaching = false
-	departing = true
+	state = State.DEPARTING
 	departure_speed = 0.0
 
 func _process(delta: float) -> void:
-	if approaching:
+	if state == State.APPROACHING:
 		position.x += departure_speed * delta
 		animation_time += delta
 		# Ao sair do enquadramento inicial, continua até a parada fora da câmera.
-		if position.x >= 900.0:
+		if _rear_is_offscreen():
 			position.x = stop_x
-			approaching = false
 			open_doors()
 			arrived_at_stop.emit()
 		queue_redraw()
-	elif departing:
-		departure_speed = move_toward(departure_speed, 430.0, 260.0 * delta)
+	elif state == State.DEPARTING:
+		departure_speed = move_toward(departure_speed, DEPARTURE_MAX_SPEED, DEPARTURE_ACCELERATION * delta)
 		position.x += departure_speed * delta
 		animation_time += delta
 		queue_redraw()
+		if _rear_is_offscreen():
+			state = State.GONE
+			departure_finished.emit()
+
+func _rear_is_offscreen() -> bool:
+	var rear_screen := get_global_transform_with_canvas() * Vector2(-REAR_EXTENT, 0)
+	return rear_screen.x > get_viewport_rect().size.x + EXIT_MARGIN
 
 func _on_body_entered(body: Node2D) -> void:
 	if accepting_passengers and body is Runner:
@@ -85,11 +98,11 @@ func _draw() -> void:
 	for wheel_x in [-190.0, -30.0]:
 		draw_circle(Vector2(wheel_x, -18), 16, Color("#182531"))
 		draw_circle(Vector2(wheel_x, -18), 7, Color("#aeb8be"))
-		if approaching or departing:
-			var spoke_angle := animation_time * 12.0
+		if state in [State.APPROACHING, State.DEPARTING]:
+			var spoke_angle := animation_time * WHEEL_ANIMATION_SPEED
 			var spoke := Vector2(cos(spoke_angle), sin(spoke_angle)) * 6.0
 			draw_line(Vector2(wheel_x, -18) - spoke, Vector2(wheel_x, -18) + spoke, Color("#596873"), 2)
-	if approaching or departing:
+	if state in [State.APPROACHING, State.DEPARTING]:
 		var puff := posmod(animation_time * 45.0, 24.0)
 		draw_circle(Vector2(-246 - puff, -26), 5.0 + puff * 0.18, Color("#d9e3e5aa"))
 		draw_circle(Vector2(-260 - puff * 1.4, -34), 4.0 + puff * 0.12, Color("#edf2f2aa"))

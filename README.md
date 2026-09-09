@@ -19,6 +19,18 @@ Entrar pela porta aberta conclui a fase. As fases 1 e 2 são tutoriais mais curt
 
 ## Onde mexer
 
+Após a refatoração:
+
+- `levels/level_1.tres` até `level_5.tres`: nome, tempo, comprimento e obstáculos tipados, editáveis no Inspector.
+- `scenes/level.tscn` e `scripts/level.gd`: montagem do percurso.
+- `scenes/hud.tscn` e `scripts/hud.gd`: apresentação editável, tema e ancoragem.
+- `scripts/game.gd`: coordenação da partida; `restart_level()`, `continue_game()` e `toggle_pause()` podem ser chamados por futuros botões.
+- Input Map: `move_left`, `move_right`, `jump`, `pause`, `restart`, `continue_game`. Botões de toque poderão acionar as mesmas ações.
+- `scripts/collision_layers.gd`: nomes das camadas de colisão.
+- `tests/flow_test.gd`: chegada, pausa, embarque nas cinco fases e derrota por impacto. Execute com Godot: `--headless --path . --script res://tests/flow_test.gd`.
+
+Regras de movimento e encontro usam constantes locais com nomes. Coordenadas de desenho continuam como dados visuais locais. Não há classes Command: o Input Map conecta dispositivos à jogabilidade.
+
 - `scenes/main.tscn`: ponto de entrada da fase.
 - `scenes/player.tscn`: personagem reutilizável, desenho provisório e colisão.
 - `scripts/game.gd`: percurso, câmera, cronômetro, HUD, vitória, derrota e reinício.

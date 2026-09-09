@@ -1,0 +1,87 @@
+[gd_resource type="Resource" script_class="LevelDefinition" load_steps=18 format=3]
+
+[ext_resource type="Script" path="res://scripts/level_definition.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/obstacle_definition.gd" id="2"]
+
+[sub_resource type="Resource" id="Obstacle_0"]
+script = ExtResource("2")
+x = 720.0
+kind = 0
+
+[sub_resource type="Resource" id="Obstacle_1"]
+script = ExtResource("2")
+x = 1390.0
+kind = 1
+
+[sub_resource type="Resource" id="Obstacle_2"]
+script = ExtResource("2")
+x = 1840.0
+kind = 2
+
+[sub_resource type="Resource" id="Obstacle_3"]
+script = ExtResource("2")
+x = 2580.0
+kind = 0
+
+[sub_resource type="Resource" id="Obstacle_4"]
+script = ExtResource("2")
+x = 3320.0
+kind = 1
+
+[sub_resource type="Resource" id="Obstacle_5"]
+script = ExtResource("2")
+x = 4110.0
+kind = 0
+
+[sub_resource type="Resource" id="Obstacle_6"]
+script = ExtResource("2")
+x = 4520.0
+kind = 1
+
+[sub_resource type="Resource" id="Obstacle_7"]
+script = ExtResource("2")
+x = 4860.0
+kind = 2
+
+[sub_resource type="Resource" id="Obstacle_8"]
+script = ExtResource("2")
+x = 1050.0
+kind = 0
+
+[sub_resource type="Resource" id="Obstacle_9"]
+script = ExtResource("2")
+x = 1450.0
+kind = 0
+
+[sub_resource type="Resource" id="Obstacle_10"]
+script = ExtResource("2")
+x = 2240.0
+kind = 1
+
+[sub_resource type="Resource" id="Obstacle_11"]
+script = ExtResource("2")
+x = 3700.0
+kind = 2
+
+[sub_resource type="Resource" id="Obstacle_12"]
+script = ExtResource("2")
+x = 2640.0
+kind = 0
+
+[sub_resource type="Resource" id="Obstacle_13"]
+script = ExtResource("2")
+x = 4170.0
+kind = 0
+
+[sub_resource type="Resource" id="Obstacle_14"]
+script = ExtResource("2")
+x = 5200.0
+kind = 1
+
+[resource]
+script = ExtResource("1")
+title = "Rua em obras"
+length = 5700.0
+departure_time = 34.0
+obstacles = Array[ExtResource("2")]([SubResource("Obstacle_0"), SubResource("Obstacle_1"), SubResource("Obstacle_2"), SubResource("Obstacle_3"), SubResource("Obstacle_4"), SubResource("Obstacle_5"), SubResource("Obstacle_6"), SubResource("Obstacle_7"), SubResource("Obstacle_8"), SubResource("Obstacle_9"), SubResource("Obstacle_10"), SubResource("Obstacle_11"), SubResource("Obstacle_12"), SubResource("Obstacle_13"), SubResource("Obstacle_14")])
+threat_positions = PackedFloat32Array(2960)

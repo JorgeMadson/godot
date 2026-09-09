@@ -21,8 +21,8 @@ func setup(new_kind: Kind) -> void:
 			collision.position = Vector2(0, -17)
 	collision.shape = shape
 	add_child(collision)
-	collision_layer = 2
-	collision_mask = 1
+	collision_layer = CollisionLayers.INTERACTIONS
+	collision_mask = CollisionLayers.PLAYER
 	body_entered.connect(_on_body_entered)
 	queue_redraw()
 

@@ -8,6 +8,12 @@ O usuário quer jogar o protótipo hoje. A primeira fase completa está implemen
 
 ## Estado confirmado em 2026-09-09
 
+### Refatoração de manutenção
+
+As configurações das cinco fases agora estão em recursos tipados `levels/*.tres`, preservando os percursos e tempos. `level.gd` monta o percurso; `game.gd` coordena a partida; `hud.tscn` permite editar a interface visualmente. O ônibus usa enum e sinaliza quando termina de sair da câmera. A derrota é imediata quando o impacto zera o cronômetro. Movimento usa ações próprias do Input Map. Menus e controles de toque continuam pendentes.
+
+O teste `tests/flow_test.gd` substitui `tests/smoke_loss.gd`. Os itens históricos abaixo descrevem a evolução anterior; para localizar responsabilidades atuais, consultar o README.
+
 - `project.godot` aponta para `res://scenes/main.tscn`.
 - `scenes/main.tscn`: cena principal mínima que carrega `scripts/game.gd`.
 - `scripts/game.gd`: constrói uma fase linear completa, câmera, HUD, cronômetro, pausa, resultado e reinício.

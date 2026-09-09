@@ -1,6 +1,8 @@
 class_name FortalezaScenery
 extends Node2D
 
+const BASELINE_Y := 424.0
+
 var level_length := 5700.0
 
 func _ready() -> void:
