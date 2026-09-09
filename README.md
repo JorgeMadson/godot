@@ -1,6 +1,6 @@
 # Corre, o ônibus!
 
-Protótipo jogável em Godot 4. Corra pela orla inspirada em Fortaleza, desvie dos obstáculos e alcance a porta do ônibus antes que ele parta.
+Protótipo jogável em Godot 4 com cinco fases. Veja o ônibus passar, corra pela orla inspirada em Fortaleza e alcance a parada antes que ele parta.
 
 ## Como abrir e jogar
 
@@ -8,12 +8,14 @@ Protótipo jogável em Godot 4. Corra pela orla inspirada em Fortaleza, desvie d
 2. No painel **Sistema de arquivos**, abra `scenes/main.tscn`.
 3. Aperte **F5** para executar o projeto. **F6** executa a cena que estiver aberta; use com `main.tscn` aberta.
 4. Use **← →** para correr e **Espaço** para pular. Um toque produz um salto curto; segurar produz um salto alto.
-5. Use **P** para pausar e **R** para reiniciar a fase.
+5. Use **P** para pausar, **R** para reiniciar a fase e **Enter** para avançar depois de embarcar.
 6. Aperte **F8** para parar e voltar ao editor.
 
 ## Como funciona
 
-Cada colisão tira dois segundos e empurra o personagem, com proteção temporária contra impactos repetidos. O ônibus fica no final do percurso; entrar pela porta aberta conclui a fase. Se o cronômetro chegar a zero, a câmera mostra a parada, a porta fecha e o ônibus parte antes da tela de derrota.
+No começo de cada fase, o ônibus passa pelo personagem e segue até a parada. Quando ele chega, o controle e o cronômetro são liberados. Cada colisão tira dois segundos e empurra o personagem, com proteção temporária contra impactos repetidos. O encontro fictício grita “Perdeu! Perdeu!” antes de bloquear o caminho.
+
+Entrar pela porta aberta conclui a fase. As fases 1 e 2 são tutoriais mais curtos: a primeira tem 2.800 px e 19 segundos; a segunda tem 4.000 px e 24 segundos. As fases 3–5 usam o percurso completo, com mais obstáculos e 34, 31 e 28 segundos. Se o cronômetro chegar a zero, a câmera mostra a parada, a porta fecha e o ônibus parte antes da tela de derrota.
 
 ## Onde mexer
 

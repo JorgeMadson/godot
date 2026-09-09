@@ -17,7 +17,10 @@ O usuário quer jogar o protótipo hoje. A primeira fase completa está implemen
 - `scripts/threat.gd`: encontro fictício sinalizado antes de bloquear o caminho.
 - `scripts/bus.gd`: ônibus desenhado em código com cores e grafismos das referências e área de embarque.
 - O usuário abriu o projeto na Godot e confirmou que viu o boneco na pista.
-- Vitória, derrota por tempo, pausa e reinício foram implementados. Progressão entre múltiplas fases ainda não existe.
+- Vitória, derrota por tempo, pausa, reinício e progressão por cinco fases foram implementados. Enter avança após a vitória; depois da quinta fase, reinicia o ciclo.
+- O ônibus passa pelo personagem no início, segue fora da câmera até a parada e só então libera o controle e o cronômetro.
+- Após teste manual do usuário, as fases introdutórias foram encurtadas: fase 1 tem comprimento 2.800, três obstáculos e 19 segundos; fase 2 tem comprimento 4.000, mais obstáculos, o encontro fictício e 24 segundos. As fases 3–5 mantêm comprimento 5.700 e tempos de 34, 31 e 28 segundos.
+- O encontro fictício exibe “Perdeu! Perdeu!” antes de avançar para bloquear o caminho.
 - A fase foi carregada pela Godot 4.7.2 em modo headless e terminou com código 0, sem erros de script. Ainda depende de partida manual para avaliar dificuldade, enquadramento e sensação do controle.
 - Executável localizado em `/home/instituto/Documentos/dev/Godot_v4.7.2-stable_linux.x86_64`; não está no PATH. Em ambiente isolado, usar `XDG_DATA_HOME` e `XDG_CONFIG_HOME` apontando para `/tmp`.
 - Referências na raiz: `onibus-fortaleza.jpg`, `onibus-fortaleza-2.jpg`, `onibus-fortaleza-3.jpg`.
@@ -58,8 +61,8 @@ Uma fase de aproximadamente 45–90 segundos, com reinício imediato e chegada f
 ## Depois da primeira fase funcionar
 
 - Deslize e obstáculos altos; testar se levantar sob teto não prende o personagem.
-- Três fases manuais: introdução, obras e horário de pico.
-- Chegada libera próxima fase; tela de resultado permite continuar. Salvar desbloqueios em `user://`.
+- Criar variação visual própria para cada uma das cinco fases atuais.
+- Salvar desbloqueios em `user://`; por enquanto a progressão vive durante a execução e F5 começa na fase 1.
 - Cenários de Centro e Dragão do Mar; novas composições de obstáculos.
 - Animações, áudio e ajustes de dificuldade baseados em partidas reais.
 - Exportação executável quando o alvo e os templates estiverem disponíveis.

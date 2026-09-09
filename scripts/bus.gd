@@ -2,11 +2,14 @@ class_name FortalezaBus
 extends Area2D
 
 signal boarded
+signal arrived_at_stop
 
-var accepting_passengers := true
+var accepting_passengers := false
+var approaching := false
 var departing := false
 var departure_speed := 0.0
 var animation_time := 0.0
+var stop_x := 0.0
 
 func setup() -> void:
 	var collision := CollisionShape2D.new()
@@ -24,17 +27,41 @@ func close_doors() -> void:
 	accepting_passengers = false
 	queue_redraw()
 
+func begin_approach(target_x: float) -> void:
+	stop_x = target_x
+	position.x = -40.0
+	accepting_passengers = false
+	approaching = true
+	departing = false
+	departure_speed = 500.0
+	queue_redraw()
+
+func open_doors() -> void:
+	accepting_passengers = true
+	queue_redraw()
+
 func depart() -> void:
 	close_doors()
+	approaching = false
 	departing = true
+	departure_speed = 0.0
 
 func _process(delta: float) -> void:
-	if not departing:
-		return
-	departure_speed = move_toward(departure_speed, 430.0, 260.0 * delta)
-	position.x += departure_speed * delta
-	animation_time += delta
-	queue_redraw()
+	if approaching:
+		position.x += departure_speed * delta
+		animation_time += delta
+		# Ao sair do enquadramento inicial, continua até a parada fora da câmera.
+		if position.x >= 900.0:
+			position.x = stop_x
+			approaching = false
+			open_doors()
+			arrived_at_stop.emit()
+		queue_redraw()
+	elif departing:
+		departure_speed = move_toward(departure_speed, 430.0, 260.0 * delta)
+		position.x += departure_speed * delta
+		animation_time += delta
+		queue_redraw()
 
 func _on_body_entered(body: Node2D) -> void:
 	if accepting_passengers and body is Runner:
@@ -58,11 +85,11 @@ func _draw() -> void:
 	for wheel_x in [-190.0, -30.0]:
 		draw_circle(Vector2(wheel_x, -18), 16, Color("#182531"))
 		draw_circle(Vector2(wheel_x, -18), 7, Color("#aeb8be"))
-		if departing:
+		if approaching or departing:
 			var spoke_angle := animation_time * 12.0
 			var spoke := Vector2(cos(spoke_angle), sin(spoke_angle)) * 6.0
 			draw_line(Vector2(wheel_x, -18) - spoke, Vector2(wheel_x, -18) + spoke, Color("#596873"), 2)
-	if departing:
+	if approaching or departing:
 		var puff := posmod(animation_time * 45.0, 24.0)
 		draw_circle(Vector2(-246 - puff, -26), 5.0 + puff * 0.18, Color("#d9e3e5aa"))
 		draw_circle(Vector2(-260 - puff * 1.4, -34), 4.0 + puff * 0.12, Color("#edf2f2aa"))

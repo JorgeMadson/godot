@@ -8,7 +8,7 @@ var state := State.WAITING
 var player: Runner
 var warning_time := 0.0
 var start_x := 0.0
-var speech := "!"
+var speech := ""
 
 func setup(target: Runner) -> void:
 	player = target
@@ -32,12 +32,12 @@ func _physics_process(delta: float) -> void:
 			if player.global_position.x > global_position.x - 430.0:
 				state = State.WARNING
 				warning_time = 0.75
-				speech = "EI!"
+				speech = "QUAL É,\nVETIN?"
 		State.WARNING:
 			warning_time -= delta
 			if warning_time <= 0.0:
 				state = State.BLOCKING
-				speech = "PARA!"
+				speech = "PERDEU!\nPERDEU!"
 		State.BLOCKING:
 			position.x = move_toward(position.x, start_x - 75.0, 105.0 * delta)
 			if player.global_position.x > start_x + 150.0:
@@ -58,5 +58,7 @@ func _draw() -> void:
 	draw_rect(Rect2(-10, -10, 7, 10), Color("#26374a"))
 	draw_rect(Rect2(3, -10, 7, 10), Color("#26374a"))
 	if speech != "":
-		draw_rect(Rect2(-23, -78, 47, 22), Color("#fff7df"))
-		draw_string(ThemeDB.fallback_font, Vector2(-18, -62), speech, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#2e2236"))
+		var lines := speech.split("\n")
+		draw_rect(Rect2(-39, -91, 83, 38), Color("#fff7df"))
+		draw_string(ThemeDB.fallback_font, Vector2(-33, -75), lines[0], HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#2e2236"))
+		draw_string(ThemeDB.fallback_font, Vector2(-33, -59), lines[1], HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("#2e2236"))
